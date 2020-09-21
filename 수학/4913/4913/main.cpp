@@ -6,7 +6,7 @@ int arr[1000001];
 
 int main(void){
     int a, b;
-    
+
     for(int i = 0;; i++){
         scanf("%d %d", &a,&b);
         if((a < 0 && b < 0) || a > b || b > 1000000){
