@@ -19,12 +19,11 @@ int main(void){
     
     sort(arr,arr+numFa);
     
-    long long left = 0, right = sum / numFa;
+    long long left = 1, right = sum / numFa;
     long long mid = (left + right)/2;
     while(left <= right) {
-        int ch = 0;
+        double ch = 0;
         for(int i = 0 ; i < numFa; i++){
-            cout << mid << " ";
             ch += arr[i] / mid;
         }
         if( ch >= numChicken){
@@ -32,7 +31,11 @@ int main(void){
         }else{
             right = mid - 1;
         }
-        mid = (left + right) / 2; 
+        mid = (left + right) / 2;
+        
+        if( mid == 0){
+            break;
+        }
     }
     
     cout << sum - mid * numChicken;
