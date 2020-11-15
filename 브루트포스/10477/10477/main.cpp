@@ -44,7 +44,7 @@ int main(void){
         }
         
         for(int i = 1 ; max(t1,t2) >= pow(2,i-1); i++ ){
-            cout << "range: " << pow(2,i-1) << endl;
+            int curr = i + pow(2,i-1);
             divide(0, 0, pow(2,i-1), t1, t2);
         }
         
