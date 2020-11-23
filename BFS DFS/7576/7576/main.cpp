@@ -1,96 +1,64 @@
-#include <vector>
-#include <stdlib.h>
 #include <iostream>
 #include <queue>
-#include <string>
+
 using namespace std;
 
-int **map;
-bool **visit;
-int row, column;
-const int dx[4] = {-1,0,1,0};
-const int dy[4] = {0,-1,0,1};
-int BFS(){
-    int result = 0 ;
-    queue<pair<int,int>> q ;
+int arr[1001][1001];
+int dist[1001][1001];
+int dx[4] = {-1,0,1,0};
+int dy[4] = {0,1,0,-1};
+int main(void) {
+    int row, column;
+    queue<pair<int,int>> queue;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    cin >> column >> row;
     
     for(int i = 0 ; i < row ; i++){
-        for(int j = 0 ;j <column; j++){
-            if( map[i][j] == 1){
-                bool check = true;
-                int curr_x = j;
-                int curr_y = i ;
-                
-                q.push(make_pair(curr_x, curr_y));
-                while(!q.empty()){
-                    curr_x = q.front().first;
-                    curr_y = q.front().second;
-                    q.pop();
-                    bool t = false;
-                    for(int k = 0 ;k < 4; k++){
-                        int dir_x = curr_x + dx[k];
-                        int dir_y = curr_y + dy[k];
-                        if ( dir_x >= 0 && dir_x < column && dir_y >= 0 && dir_y < row && map[dir_y][dir_x] == 0 && !visit[dir_y][dir_x]){
-                            visit[dir_y][dir_x] = true;
-                            map[dir_y][dir_x] += map[curr_y][curr_x];
-                            q.push(make_pair(dir_x, dir_y));
-                            
-                            t = true;
-                        }
-                    }
-                    if(t) result++;
-                    
-                    
-                    for(int it = 0 ; it < row; it++){
-                        for(int jt = 0 ;jt < column; jt++){
-                            cout << map[it][jt] << " ";
-                        }
-                        cout << endl;
-                    }
-                    cout << endl << result << endl;
-                    for(int it = 0 ; it < row; it++){
-                        for(int jt = 0 ;jt < column; jt++){
-                            if( map[it][jt] == 0) {
-                                check = false;
-                                break;
-                            }
-                        }
-                        if( !check ) break;
-                    }
-                    if( check ) {
-                        return result ;
-                    }
+        for(int j= 0 ; j< column; j++){
+            cin >> arr[i][j] ;
+            if(arr[i][j] == 1){
+                queue.push({j,i});
+            }
+            if(arr[i][j] == 0){
+                dist[i][j] = -1;
+            }
+        }
+    }
+  
+    while(!queue.empty()){
+        int curr_x = queue.front().first;
+        int curr_y = queue.front().second;
+        
+        queue.pop();
+        
+        for(int k = 0 ; k < 4; k++){
+            int dir_x = curr_x + dx[k];
+            int dir_y = curr_y + dy[k];
+            
+            if( (dir_x >= 0 && dir_x < column) && (dir_y >= 0 && dir_y < row)){
+                if( dist[dir_y][dir_x] == -1){
+                    dist[dir_y][dir_x] = dist[curr_y][curr_x] + 1;
+                    queue.push({dir_x,dir_y});
                 }
-                
             }
         }
     }
     
-    
-    return result;
-}
-int main() {
-    
-    scanf("%d %d",&column, &row);
-    getchar();
-    map = (int**)malloc(sizeof(int*) * row) ;
-    visit =(bool**)malloc(sizeof(bool*) * row);
+    int result = 0 ;
     for(int i = 0 ; i < row; i++){
-        map[i] = (int*)malloc(sizeof(int) * column);
-        visit[i] = (bool*)malloc(sizeof(bool) * column);
-    }
-    
-    for(int i = 0 ; i < row; i++){
-            for(int j= 0 ; j < column; j++){
-                if( j != column -1){
-                    scanf("%d ",&map[i][j]);
-                }else{
-                    scanf("%d",&map[i][j]);
-                }
+        for(int j = 0 ; j < column; j++){
+            if( dist[i][j] == -1 ){
+                cout << "-1" << "\n";
+                return 0;
+            }else{
+                result = max(result, dist[i][j]);
             }
-            getchar();
+        }
     }
     
-    cout << BFS();
+    cout << result << "\n";
     return 0;
 }
