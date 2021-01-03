@@ -5,6 +5,9 @@
         "utility": "cpp",
         "iostream": "cpp",
         "ostream": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "stack": "cpp",
+        "__locale": "cpp",
+        "cstring": "cpp"
     }
 }
