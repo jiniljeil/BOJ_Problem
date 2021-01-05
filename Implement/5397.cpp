@@ -1,8 +1,10 @@
 #include <iostream>
 #include <list> 
+
 using namespace std ;
 
 int N; 
+
 int main(void){
     ios::sync_with_stdio(false);
     cin.tie(NULL);
@@ -11,36 +13,34 @@ int main(void){
     cin >> N ; 
 
     for(int i = 0 ; i < N; i++) {
-        list<char> l; 
         string str; 
         cin >> str ;
-
-        auto cursor = l.begin(); 
+        list<char> l; 
+        list<char>::iterator cursor = l.end();
         for(int j = 0 ; j < str.length(); j++) {
             if( str[j] == '<'){
-                if(cursor != l.begin()){
+                if( cursor != l.begin()){
                     cursor--;
                 }
-            }else if( str[j] == '>'){
+            }else if(str[j] == '>'){
                 if(cursor != l.end()){
                     cursor++;
                 }
             }else if( str[j] == '-'){
-                if(l.size() != 0){
-                    cursor = l.erase(cursor);
+                if( cursor != l.begin()){
+                    cursor = l.erase(--cursor);
                 }
             }else{
-                l.push_back(str[j]);
-                cursor++;
+                l.insert(cursor,1,str[j]); 
             }
-
-            
         }
 
-        for(char c: l){
-            cout << c ;
+        list<char>::iterator iter ;
+        for(iter = l.begin(); iter != l.end(); iter++){
+            cout << *iter ;
         }
-
+        cout << "\n";
+        l.clear();
     }
     return 0;
 }
