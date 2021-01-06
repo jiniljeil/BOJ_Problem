@@ -33,7 +33,8 @@ int main(void){
             }
         }else if(tmp == 'B'){
             if(cursor != l.begin()){
-                cursor--; cursor = l.erase(cursor);
+                cursor--; 
+                cursor = l.erase(cursor);
             }
         }else if(tmp == 'P'){
             char t2;
