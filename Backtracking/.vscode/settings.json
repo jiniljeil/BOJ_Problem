@@ -4,6 +4,10 @@
         "iostream": "cpp",
         "algorithm": "cpp",
         "random": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "istream": "cpp",
+        "string": "cpp"
     }
 }
