@@ -33,7 +33,6 @@ void func(long long x, long long y, long long size) {
         }else{
             func(x, y, size/2);
         }
-        
     }
 }
 
