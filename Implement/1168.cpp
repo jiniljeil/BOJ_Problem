@@ -5,7 +5,7 @@ using namespace std ;
 
 int seg[4 * MAX]; 
 
-// 세그먼트 트리 초기화
+// leaf 값 1 인세그먼트 트리 생성
 int seginit(int node, int start, int end) {
     if(start == end) return seg[node] = 1; // elements[start]; 
     int mid = (start + end) / 2 ; 
@@ -14,8 +14,8 @@ int seginit(int node, int start, int end) {
 
 // 원소 삭제 
 int segupdate(int node, int start, int end, int remove) { // 삭제할 원소
-    seg[node]--; 
-    if (start == end) return 0 ;
+    seg[node]--;
+    if (start == end) return 0 ; // leaf = 0 (원소 제거)
     int mid = (start + end) / 2; 
     if( remove <= mid ) return segupdate( 2 * node, start, mid, remove); 
     else return segupdate( 2 * node + 1, mid + 1, end, remove); 
@@ -23,7 +23,7 @@ int segupdate(int node, int start, int end, int remove) { // 삭제할 원소
 
 // 다음 순서 찾기 
 int next_num(int node, int start, int end, int order) {
-    if (start == end) return start; 
+    if (start == end) return start; // 해당 되는 순서를 찾았을 경우 
     int mid = (start + end) / 2; 
     if( order <= seg[2 * node] ) return next_num(2 * node, start, mid, order) ;
     else return next_num(2 * node + 1, mid + 1, end, order - seg[2 * node]); 
