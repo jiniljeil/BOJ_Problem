@@ -12,17 +12,20 @@ bool visited[MAX] ;
 void DFS(int curr, int depth) { 
     visited[curr] = true; 
     Depth[curr] = depth ; 
-
+    
+    // 현재 노드와 연결된 노드  
     for (int i = 0 ; i < v[curr].size(); i++) {
         int next_node = v[curr][i]; 
+        // 방문한 노드는 Skip 
         if ( visited[next_node] ) continue; 
+        // 현재 노드와 연결된 노드는 현재 노드를 부모로 가집니다. 
         parent[next_node] = curr ;
         DFS(next_node ,depth + 1) ; 
     }
 }
 
 int LCA(int x, int y) { 
-    // Depth(높이)가 다를 경우, 맞춰준다. 
+    // Depth(깊이)가 다를 경우, 거슬러 올라가는 과정을 반복하여 깊이(Depth)를 맞춰준다. 
     while ( Depth[x] != Depth[y] ) { 
         if (Depth[x] > Depth[y]) { 
             x = parent[x]; 
