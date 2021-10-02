@@ -8,46 +8,48 @@ int N, M, n1, n2;
 vector<int> graph[MAX]; 
 bool visited[MAX]; 
 int Depth[MAX], parent[MAX][LOG]; 
-void DFS(int curr, int depth) {
-    visited[curr] = true ; 
-    Depth[curr] = depth ; 
+void DFS(int curr, int depth) { 
+    visited[curr] = true ;
+    Depth[curr] = depth ;  
 
     for (int i = 0 ; i < graph[curr].size(); i++) {
-        int next_node = graph[curr][i] ;
+        int next_node = graph[curr][i]; 
         if ( visited[next_node] ) continue; 
-        parent[next_node][0] = curr; 
-        DFS(next_node, depth + 1) ;
+        parent[next_node][0] = curr ;
+        DFS(next_node, depth + 1); 
     }
 }
 
-void Set_Parent() { 
-    DFS(1, 0); 
-    for (int i = 1 ; i < LOG ; i++) { 
-        for (int j = 1 ; j <= N ; j++) {
+void set_parent() { 
+    DFS(1, 0) ;
+    for (int i = 1 ; i < LOG; i++) {
+        for (int j = 1;  j <= N ; j++) {
             parent[j][i] = parent[parent[j][i-1]][i-1]; 
         }
     }
 }
 
-int Fast_LCA(int x, int y) { 
-    if (Depth[x] > Depth[y]) swap(x, y); 
+int Fast_LCA(int x, int y) {
+    if (Depth[x] > Depth[y]) swap(x,y); 
 
-    for (int i = LOG - 1 ; i >= 0 ; i--) {
-        if ( Depth[y] - Depth[x] >= (1 << i)) { 
-            y = parent[y][i]; 
+    for(int i = LOG - 1; i >= 0 ; i--) {
+        if (Depth[y] - Depth[x] >= (1 << i)) {
+            y = parent[y][i] ;
         }
     }
 
     if ( x == y ) return x; 
 
-    for (int i = LOG - 1; i >= 0 ; i--) {
-        if (parent[x][i] != parent[y][i]) {
-            x = parent[x][i] ; 
-            y = parent[y][i] ;
+    for(int i = LOG - 1; i >= 0 ; i--) {
+        if ( parent[x][i] != parent[y][i] ) {
+            x = parent[x][i]; 
+            y = parent[y][i]; 
         }
     }
+
     return parent[x][0] ;
-} 
+}
+
 
 int main(void) {
     ios::sync_with_stdio(false); 
@@ -61,12 +63,7 @@ int main(void) {
         graph[n2].push_back(n1); 
     }
 
-    DFS(1, 0); 
-    for (int i = 1 ; i < LOG ; i++) { 
-        for (int j = 1 ; j <= N ; j++) {
-            parent[j][i] = parent[parent[j][i-1]][i-1]; 
-        }
-    }
+    set_parent() ; 
 
     cin >> M ;  
 
