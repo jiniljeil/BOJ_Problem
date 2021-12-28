@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector> 
+#include <algorithm>
 #include <string.h> 
 using namespace std ;
 
@@ -7,13 +7,6 @@ int result = 1e8, n = 0 ;
 int rgb[1000][3]; 
 int rgb_dp[1000][3]; 
 
-int min(int a, int b) {
-    if( a > b) {
-        return b;
-    }else{
-        return a;
-    }
-}
 int DP(int k, int pre) { 
     if( k == n) return 0; 
     if( rgb_dp[k][pre] != -1) return rgb_dp[k][pre]; 
