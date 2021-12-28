@@ -67,7 +67,7 @@ int main(void) {
     int v1_to_dest = dijkstra(V1, N) ; 
     int v2_to_dest = dijkstra(V2, N) ; 
 
-    // 1 -> v1 -> v2 -> N 
+    
     if ( v1_to_v2 == INF || source_to_v1 == INF || source_to_v2 == INF ) { 
         cout << -1 << '\n'; 
         return 0 ; 
@@ -76,10 +76,13 @@ int main(void) {
             cout << -1 << '\n'; 
             return 0 ; 
         } else { 
+            // 1 -> v1 -> v2 -> N 
             result = min(result, source_to_v1 + v1_to_v2 + v2_to_dest ) ; 
         }
 
         if ( v1_to_dest != INF ) { 
+            // 1 -> v2 -> v1 -> N 
+            // v1_to_v2 == v2_to_v1
             result = min(result, source_to_v2 + v1_to_v2 + v1_to_dest) ; 
         }
     }
