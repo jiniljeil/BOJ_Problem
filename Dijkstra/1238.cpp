@@ -1,65 +1,69 @@
-#include <iostream>
-#include <queue> 
+#include <iostream> 
 #include <vector> 
-#include <algorithm> 
-#define MAX 1001
-#define INF 1e8 
+#include <queue> 
+#define INF 1e9 
 using namespace std; 
 
 int N, M, X ; 
-vector< pair<int,int> > v[MAX]; 
-int result ; 
-int DIST[MAX]; 
-int Dijsktra(int start, int end) { 
-    for(int i = 1 ; i <= N ; i++) DIST[i] = INF; 
+vector<pair<int, int> > v[1001] ;
+int DIST[1001] ; 
+int dijsktra(int start) { 
+    for(int i = 1 ; i <= N; i++) DIST[i] = INF ; 
 
-    priority_queue< pair<int,int>, vector< pair<int,int> >, greater< pair<int,int> > > q ;
+    priority_queue<pair<int, int> > pq ; 
 
-    q.push(make_pair(0, start)); 
-    DIST[start] = 0 ;
-    while(!q.empty()){
-        int weight = q.top().first ; 
-        int curr_v = q.top().second ; 
-        q.pop(); 
+    pq.push(make_pair(-0, start)) ; 
+    DIST[start] = 0 ; 
 
-        for(int i = 0 ; i < v[curr_v].size(); i++) { 
-            int next_v = v[curr_v][i].first ; 
-            int next_w = v[curr_v][i].second; 
+    while(!pq.empty()) {
+        int curr_weight = -pq.top().first; 
+        int curr_node = pq.top().second ; 
 
-            if( DIST[next_v] > weight + next_w) { 
-                DIST[next_v] = weight + next_w ;   
-                q.push(make_pair(DIST[next_v], next_v)); 
+        pq.pop(); 
+
+        for(int i = 0 ; i < v[curr_node].size(); i++) {
+            int next_node = v[curr_node][i].first ;  
+            int next_weight = v[curr_node][i].second ;  
+            
+            if ( DIST[next_node] > curr_weight + next_weight)  {
+                DIST[next_node] = curr_weight + next_weight ; 
+                pq.push(make_pair(-DIST[next_node], next_node)); 
             }
         }
     }
-    return DIST[end] ;
+
+    return DIST[X] ; 
 }
-int main(void){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL); 
 
+void Input()  {
     cin >> N >> M >> X ; 
-    int a,b,c; 
-    for(int i = 0 ; i < M ;i++) {
+
+    int a, b, c; 
+    for(int i = 0 ; i < M; i++)  {
         cin >> a >> b >> c ; 
-        v[a].push_back(make_pair(b,c)); 
+        v[a].push_back(make_pair(b, c)) ; 
     }
+}
 
-    vector< pair<int,int> > vc;
-    
-    for(int i = 1;  i <= N; i++) {
-        if( i != X ) {
-            vc.push_back(make_pair(i, Dijsktra(i, X))); 
-        }
-    }
-    for(int i = 0; i < vc.size(); i++){
-        int vertex = vc[i].first; 
-        int cost = vc[i].second; 
-        int back_cost = Dijsktra(X, vertex) ;
-        result = max(result, cost + back_cost) ;
-    }
+int main(void) {
+    ios::sync_with_stdio(false) ; 
+    cin.tie(0); 
+    int result = 0 ; 
 
-    cout << result << "\n";
-    return 0 ;
+    Input() ; 
+    // X 에서 각자 집으로 돌아가기 
+    dijsktra(X); 
+
+    int DIST_COPY[1001] ; 
+    for (int i = 1; i <= N; i++) {
+        DIST_COPY[i] = DIST[i] ; 
+    } 
+
+    // X에 도달하는데 걸리는 시간 + X에서 집으로 돌아가는데 걸리는 시간 MAX
+    for (int i = 1 ; i <= N; i++) {
+        result = max(result, DIST_COPY[i] + dijsktra(i)) ;  
+    }
+    cout << result << '\n';
+
+    return 0;
 }
