@@ -1,16 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <queue> 
-#define MAX 20001 
-#define INF 1e8
+#include <limits.h>
+#define MAX 1001 
+#define INF INT_MAX
 using namespace std;
 
-int V,E,K; 
+int N, M; 
+int S, E; 
 vector< pair<int,int> > v[MAX]; 
 int DIST[MAX]; 
 
-void Dijsktra(int start) { 
-    for(int i = 1 ; i <= V; i++) DIST[i] = INF ;
+int Dijsktra(int start, int end) { 
+    for(int i = 1 ; i <= N; i++) DIST[i] = INF ;
 
     // priority_queue< pair<int,int>, vector< pair<int,int> >, greater< pair<int, int> > > q; 
     priority_queue< pair<int,int> > q ; 
@@ -22,6 +24,9 @@ void Dijsktra(int start) {
         int curr_v = q.top().second;
         q.pop(); 
 
+        // Key Point
+        if ( DIST[curr_v] < curr_w ) continue ; 
+
         for(int i = 0 ; i < v[curr_v].size(); i++){
             int next_v = v[curr_v][i].first; 
             int next_w = v[curr_v][i].second; 
@@ -32,30 +37,25 @@ void Dijsktra(int start) {
             }
         }
     }
+    return DIST[end] ; 
+}
+
+void Input() {
+    cin >> N >> M ; 
+    int a,b,c; 
+    for(int i = 0 ; i < M; i++){
+        cin >> a >> b >> c; 
+        v[a].push_back(make_pair(b, c)); 
+    }
+    cin >> S >> E ; 
 }
 
 int main(void){
     ios::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL); 
 
-    cin >> V >> E >> K; 
-    int a,b,c; 
-    for(int i = 0 ; i < E; i++){
-        cin >> a >> b >> c; 
-        v[a].push_back(make_pair(b, c)); 
-    }
+    Input(); 
+    cout << Dijsktra(S, E) << '\n';
 
-    Dijsktra(K) ; 
-
-    for(int i = 1 ; i <= V; i++) {
-        if(DIST[i] == INF){
-            cout << "INF" << "\n";
-        }else{
-            cout << DIST[i] << "\n";
-        }
-    }
     return 0 ;
 }
-
-
