@@ -1,40 +1,44 @@
-#include <iostream>
+#include <iostream> 
+#include <cstring> 
 
-using namespace std;
+using namespace std ;
 
-int arr[2001];
-int answer[1000001];
-int main(void) {
-    int n,n2;
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+int N, M ; 
+int DP[2001][2001] ; 
+int arr[2001] ; 
+
+int DFS(int S, int E) {
+    if ( S > E ) return 1; // 짝수 
+    if ( DP[S][E] != -1 ) return DP[S][E] ; 
+    if ( S == E ) return DP[S][E] = 1 ; // 홀수 
     
-    cin >> n;
-    for(int i = 1; i <= n; i++){
-        cin >> arr[i];
+    if ( arr[S] != arr[E] ) return DP[S][E] = 0 ; 
+    else return DP[S][E] = DFS( S + 1 , E - 1) ;
+}
+
+void Input() { 
+    memset(DP, -1, sizeof(DP)) ; 
+
+    cin >> N ;
+
+    for (int i = 1 ; i <= N; i++) { 
+        cin >> arr[i] ; 
     }
-    cin >> n2;
-    for(int i = 0 ; i < n2; i++){
-        int p1, p2;
-        cin >> p1 >> p2;
-        int size = (p1+p2)/2;
-        bool check = true;
-        for(int j = p1; j <= size; j++){
-//            cout << arr[j] << " " << arr[p2-j];
-            if( arr[j] != arr[p2-j+1]){
-                check = false;
-                break;
-            }
-        }
-//        cout << endl;
-        if(check){
-            cout << "1" << "\n";
-        }else{
-            cout << "0" << "\n";
-        }
+
+    cin >> M ; 
+}
+
+int main(void) { 
+    ios::sync_with_stdio(false) ; 
+    cin.tie(0) ; 
+    int a , b; 
+    
+    Input() ; 
+
+    for (int i = 0 ; i < M; i++) { 
+        cin >> a >> b ; 
+        cout << DFS(a, b) << '\n'; 
     }
-    
-    
-    return 0;
+
+    return 0; 
 }
