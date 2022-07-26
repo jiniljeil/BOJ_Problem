@@ -1,37 +1,33 @@
-#include <iostream>
+#include <iostream> 
+#include <map> 
+#include <vector> 
 #include <algorithm>
+using namespace std; 
 
-using namespace std ;
+int N ; 
+long long tmp ; 
+map<long long, int> M ; 
 
-int N;
-long long arr[100001];
-int main(void) {
-    ios::sync_with_stdio(false); 
-    cin.tie(0); cout.tie(0);
+bool compare(const pair<long long,int>&a, const pair<long long,int> &b)  {
+    if ( a.second == b.second ) return a.first < b.first ; 
+    else return a.second > b.second ; 
+}
+int main(void) { 
+    ios::sync_with_stdio(false) ; 
+    cin.tie(0) ; 
 
-    cin >> N; 
-    for(int i = 0; i < N; i++) {
-        cin >> arr[i]; 
+    cin >> N ; 
+
+    for (int i = 0 ; i < N; i++) { 
+        cin >> tmp ; 
+
+        M[tmp]++; 
     }
 
-    sort(arr, arr+N); 
+    vector<pair<long long, int> > V (M.begin(), M.end()) ; 
 
-    long long int m = 0, c = 0;
-    long long int num = 0;
-    for(int i = 0 ; i < N; i++) {
-        c++;
-        if(i + 1 <= N && arr[i] != arr[i+1]) { // 마지막에도 업데이트 되어야하므로 = 넣기 
-            if( m < c ) {
-                num = arr[i];
-                m = c; 
-            }else if( m == c ) {
-                if( num > arr[i]) {
-                    num = arr[i];
-                }
-            }
-            c = 0 ;
-        }
-    }
-    cout << num << '\n';
-    return 0;
+    sort(V.begin(), V.end(), compare) ; 
+
+    cout << V[0].first << '\n' ;
+    return 0; 
 }
