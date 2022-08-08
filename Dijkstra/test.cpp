@@ -1,89 +1,66 @@
-#include <iostream>
+#include <iostream> 
 #include <vector> 
 #include <queue> 
-#include <limits.h>
-#define MAX 1001 
-#define INF INT_MAX
-using namespace std ;
+#include <stack> 
+#define MAX 1001
+#define INF 1e8
+using namespace std; 
 
-int N, E ;
-int V1, V2 ; 
-vector<pair<int, int> > v[MAX]; 
+int n, m ; 
+int start_v, end_v; 
+vector<pair<int, int> > V[MAX] ; 
 int DIST[MAX] ; 
-
-int dijkstra(int start, int end) { 
-    for (int i = 1; i <= N ; i++) DIST[i] = INF ; 
-
+int PATH[MAX] ; 
+stack<int> S; 
+void dijkstra() { 
+    for (int i = 1 ; i <= n; i++ ) DIST[i] = INF;
     priority_queue<pair<int, int> > pq ; 
-
-    pq.push(make_pair(-0, start)) ; 
-    DIST[start] = 0 ;
-
-    while(!pq.empty()) { 
-        int curr_w = -pq.top().first ; 
+    pq.push(make_pair(-0, start_v)) ; 
+    DIST[start_v] = 0 ; 
+    while( !pq.empty())  {
+        int weight = -pq.top().first; 
         int curr_v = pq.top().second ; 
+        pq.pop() ;
+        
+        if ( DIST[curr_v] < weight ) continue ; 
+        
+        for (int i = 0; i < V[curr_v].size(); i++) { 
+            int next_v = V[curr_v][i].first ; 
+            int next_w = V[curr_v][i].second ; 
 
-        pq.pop() ; 
-
-        for (int i = 0 ; i < v[curr_v].size(); i++) { 
-            int next_v = v[curr_v][i].first ;  
-            int next_w = v[curr_v][i].second ; 
-
-            if ( DIST[next_v] > curr_w + next_w ) { 
-                DIST[next_v] = curr_w + next_w ; 
-                pq.push(make_pair(-DIST[next_v], next_v)) ; 
+            if ( DIST[next_v] > next_w + weight) { 
+                DIST[next_v] = next_w + weight ; 
+                PATH[next_v] = curr_v ; 
+                pq.push(make_pair(-DIST[next_v], next_v)) ;
             }
         }
     }
-    return DIST[end] ; 
+
+    cout << DIST[end_v] << '\n'; 
+
+    int endpoint = end_v ; 
+    while(endpoint) { 
+        S.push(endpoint) ;
+        endpoint = PATH[endpoint];
+    }
+    cout << S.size() << '\n'; 
+    while(!S.empty()) { 
+        cout << S.top() << ' ' ; 
+        S.pop(); 
+    }
+    cout << '\n'; 
 }
 
-void Input() { 
-    cin >> N >> E; 
+int main(void) {
+    ios::sync_with_stdio(false) ; cin.tie(0) ;
 
-    int a, b, c; 
-    for (int i = 0 ; i < E; i++) {
-        cin >> a >> b >> c;  
-
-        v[a].push_back(make_pair(b, c)) ; 
-        v[b].push_back(make_pair(a, c)) ;
+    cin >> n >> m ; 
+    for (int i = 1 ; i <= m ; i++) { 
+        int a, b, c ; cin >> a >> b >> c ; 
+        V[a].push_back(make_pair(b, c)) ; 
     }
-    cin >> V1 >> V2; 
+    cin >> start_v >> end_v ; 
 
-}
-
-int main(void) {    
-    ios::sync_with_stdio(false); 
-    cin.tie(0) ; 
-
-    Input() ; 
-    int result = INF ; 
-
-    int v1_to_v2 = dijkstra(V1, V2) ; // v1 -> v2 , v2 -> v1 
-    dijkstra(1, V1); 
-    int source_to_v1 = DIST[V1] ;  // 1 -> v1 
-    int source_to_v2 = DIST[V2] ;  // 1 -> v2 
-
-    int v1_to_dest = dijkstra(V1, N) ; 
-    int v2_to_dest = dijkstra(V2, N) ; 
-
-    // 1 -> v1 -> v2 -> N 
-    if ( v1_to_v2 == INF || source_to_v1 == INF || source_to_v2 == INF ) { 
-        cout << -1 << '\n'; 
-        return 0 ; 
-    } else { 
-        if ( v2_to_dest == INF ) { 
-            cout << -1 << '\n'; 
-            return 0 ; 
-        } else { 
-            result = min(result, source_to_v1 + v1_to_v2 + v2_to_dest ) ; 
-        }
-
-        if ( v1_to_dest != INF ) { 
-            result = min(result, source_to_v2 + v1_to_v2 + v1_to_dest) ; 
-        }
-    }
-
-    cout << result << '\n';
-    return 0; 
+    dijkstra() ;
+    return 0;
 }
