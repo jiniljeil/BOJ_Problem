@@ -11,7 +11,6 @@ int path_count = 0 ;
 int max_value = -1; 
 long long total_w = 0; 
 vector<pair<int, pair<int,int> > > v; // weight, node1, node2
-priority_queue<int> pq ;
 
 int find_parent(int x) {
     if (parent[x] == x) return x ; 

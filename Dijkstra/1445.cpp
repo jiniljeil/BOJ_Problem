@@ -63,8 +63,7 @@ void dijkstra() {
 }
 
 int main(void) { 
-    ios::sync_with_stdio(false); cin.tie(0); 
-
+    ios::sync_with_stdio(false); cin.tie(0);
     
     cin >> N >> M ; 
     for (int i = 0 ; i < N ; i++) {
