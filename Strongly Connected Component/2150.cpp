@@ -19,10 +19,14 @@ int dfs(int curr) {
     int result = d[curr] ; 
     for (int i = 0 ; i < arr[curr].size(); i++) { 
         int next = arr[curr][i]; 
+        // non-visited the next node 
         if ( d[next] == 0 ) result = min(result, dfs(next)) ; 
+
+        // visited the next node
         else if (!finished[next]) result = min(result, d[next]) ; 
     }
 
+    // cycle
     if ( result == d[curr] ) { 
         vector<int> group ; 
         while(1) { 
