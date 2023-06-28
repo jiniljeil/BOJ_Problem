@@ -36,8 +36,6 @@ int bfs() {
 
         Q.pop() ; 
         
-        if ( result == INF && n >= 10 ) { result = -1; break ;}  
-        
         for (int k = 0 ; k < 4; k++) { 
             int n_ry = ry, n_rx = rx ;
             int n_by = by, n_bx = bx ;
@@ -67,7 +65,6 @@ int bfs() {
         }
     }
 
-    // n < 10이며 두 공이 동시에 들어가게 되면 result == 1e9
     return ( result == INF ) ? -1 : result ;
 }
 

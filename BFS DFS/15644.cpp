@@ -10,35 +10,39 @@ typedef struct p {
 typedef struct b { 
     point red, blue ; 
     int n ; 
+    string dir ; 
 } ball ;
 
 point red, blue;
 int R, C ;
 int dx[4] = {-1, 0, 1, 0} ; 
 int dy[4] = { 0,-1, 0, 1} ; 
+char d[4] = {'L','U','R','D'};
 int mat[SIZE][SIZE] ; 
 bool visited[SIZE][SIZE][SIZE][SIZE] ;
 int result = INF ;
+string s = ""; 
 void move(int& y, int& x, int k, int& cnt) { 
     while (mat[y + dy[k]][x + dx[k]] != '#' && mat[y][x] != 'O') {
         y += dy[k] ; x += dx[k] ; cnt++ ;
     }
 }
-int bfs() { 
+void bfs() { 
     queue<ball> Q; 
-    Q.push({red, blue, 0}) ; 
+    Q.push({red, blue, 0, ""}) ; 
     visited[red.y][red.x][blue.y][blue.x] = true ; 
 
     while (!Q.empty()) { 
         int rx = Q.front().red.x, ry = Q.front().red.y ;
         int bx = Q.front().blue.x, by = Q.front().blue.y ; 
-        int n = Q.front().n ; 
+        int n = Q.front().n ; string dir = Q.front().dir; 
 
         Q.pop() ; 
         
         if ( result == INF && n >= 10 ) { result = -1; break ;}  
         
         for (int k = 0 ; k < 4; k++) { 
+            string tmp_dir = dir ;
             int n_ry = ry, n_rx = rx ;
             int n_by = by, n_bx = bx ;
 
@@ -48,7 +52,10 @@ int bfs() {
 
             if ( mat[n_by][n_bx] == 'O') continue ;
             if ( mat[n_ry][n_rx] == 'O') { 
-                result = min(result, n + 1) ;
+                if ( result > n + 1 ) { 
+                    result = n + 1; 
+                    s = tmp_dir + d[k] ; 
+                } 
                 continue ;
             }
 
@@ -62,13 +69,20 @@ int bfs() {
             }
 
             if ( visited[n_ry][n_rx][n_by][n_bx] ) continue ; 
+            tmp_dir += d[k]; 
+
+            // cout << tmp_dir << '\n';
             visited[n_ry][n_rx][n_by][n_bx] = true ;
-            Q.push({n_ry, n_rx, n_by, n_bx, n + 1}) ;
+            Q.push({n_ry, n_rx, n_by, n_bx, n + 1, tmp_dir}) ;
         }
     }
 
     // n < 10이며 두 공이 동시에 들어가게 되면 result == 1e9
-    return ( result == INF ) ? -1 : result ;
+    if ( result == INF || result == -1 ) cout << -1 << '\n';
+    else {
+        cout << result << '\n'; 
+        cout << s << '\n';
+    }
 }
 
 int main(void) {  
@@ -83,6 +97,21 @@ int main(void) {
         }
     }
     
-    cout << bfs() << '\n'; 
+    bfs();
     return 0;
 }
+
+
+/*
+10 10
+##########
+#RB....#.#
+#..#.....#
+#........#
+#.O......#
+#...#....#
+#........#
+#........#
+#.......##
+##########
+*/
