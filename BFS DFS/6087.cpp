@@ -1,7 +1,7 @@
 #include <iostream> 
 #include <string> 
 #include <queue> 
-
+#define INF 1e9
 #define MAX 101
 using namespace std ;
 
@@ -12,40 +12,30 @@ int dx[4] = {-1, 0, 1, 0} ;
 int dy[4] = { 0, 1, 0,-1} ; 
 int start_x = -1, start_y = -1 ; 
 int end_x = -1, end_y = -1 ; 
+
 typedef struct point { 
-    int result ; 
-    int curr_dir ; 
     int x, y ; 
-} Point ; 
+} point ; 
 
+queue<point> Q ;
 void BFS() { 
-    queue<Point> Q; 
-    for (int i = 0 ; i < 4 ; i++)  {
-        Point p = {0, i, start_x, start_y}; 
-        Q.push(p) ; 
-    }
-    visited[start_y][start_x] = 0 ; 
-
     while (!Q.empty()) { 
-        Point curr = Q.front(); 
-        Q.pop() ; 
+        point curr = Q.front(); Q.pop() ; 
+        for (int k = 0 ; k < 4; k++) { 
+            int nx = curr.x + dx[k] ; 
+            int ny = curr.y + dy[k] ; 
 
-        for (int i = 0 ; i < 4; i++) { 
-            int dir_x = curr.x + dx[i] ; 
-            int dir_y = curr.y + dy[i] ; 
-            int cnt = curr.result ; 
-            if ( dir_x < 0 || dir_x >= W || dir_y < 0 || dir_y >= H) continue;  
-            if ( MAP[dir_y][dir_x] == '*') continue ; 
-            if ( curr.curr_dir != i ) cnt++;  
-            if ( visited[dir_y][dir_x] >= cnt) { 
-                visited[dir_y][dir_x] = cnt ; 
-                Point next = {cnt, i, dir_x, dir_y} ; 
-                Q.push(next) ; 
+            while ( (nx >= 0 && nx < W && ny >= 0 && ny < H) && MAP[ny][nx] != '*') { 
+                if ( !visited[ny][nx] ) { 
+                    visited[ny][nx] = visited[curr.y][curr.x] + 1 ;
+                    Q.push({nx, ny});
+                }
+                nx += dx[k];  ny += dy[k] ; 
             }
         }
     }
 
-    cout << visited[end_y][end_x] << '\n'; 
+    cout << visited[end_y][end_x] - 1<< '\n';
 }
 
 void Input() { 
@@ -56,14 +46,14 @@ void Input() {
         cin >> s ; 
         for (int j = 0; j < W; j++) { 
             MAP[i][j] = s[j] ;
-            visited[i][j] = 1e8; 
-
             if ( MAP[i][j] == 'C') { 
                 if ( start_x == -1 && start_y == -1 ) {
                     start_y = i ; start_x = j ; 
+                    Q.push({j , i});
                 } else { 
                     end_y = i ; end_x = j ; 
                 } 
+                MAP[i][j] = '.';
             }
         }
     }
